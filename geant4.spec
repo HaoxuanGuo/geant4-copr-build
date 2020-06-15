@@ -1,4 +1,4 @@
-%define         libversion 10.6.1
+%define         libversion 10.6.2
 
 %define         G4NDL_version 4.6
 %define         G4EMLOW_version 7.9.1
@@ -15,8 +15,8 @@
 %global         optflags %(echo %{optflags} | sed 's/-O[0-3]/-O3 -flto -fno-fat-lto-objects -DNDEBUG -fno-trapping-math -ftree-vectorize -fno-math-errno/ ')
 
 Name:           geant4
-Version:        10.06.p01
-Release:        5%{?dist}
+Version:        10.06.p02
+Release:        1%{?dist}
 Summary:        Toolkit for the simulation of the passage of particles through matter
 
 License:        BSD
@@ -198,6 +198,9 @@ tar -zxf %{S:11} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
 %{_sysconfdir}/profile.d/%{name}-data.sh
 
 %changelog
+* Mon Jun 15 2020 Qiyu Yan <yanqiyu01@gmail.com> - 10.06.p02-1
+- update to 10.06.p02 upstream
+
 * Thu Apr 23 2020 Qiyu Yan <3437889+karuboniru@users.noreply.github.com> - 10.06.p01-4
 - Use O3 build 
 
