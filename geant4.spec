@@ -33,6 +33,7 @@ Source8:        https://cern.ch/geant4-data/datasets/G4SAIDDATA.%{G4SAIDDATA_ver
 Source9:        https://cern.ch/geant4-data/datasets/G4ABLA.%{G4ABLA_version}.tar.gz
 Source10:       https://cern.ch/geant4-data/datasets/G4INCL.%{G4INCL_version}.tar.gz
 Source11:       https://cern.ch/geant4-data/datasets/G4ENSDFSTATE.%{G4ENSDFSTATE_version}.tar.gz
+Patch0:         fix_soname.patch
 
 
 %if 0%{?fedora} > 23
@@ -100,6 +101,7 @@ Geant4 datasets.
 
 %prep
 %setup -q -n %{name}.%{version}
+%patch0 -p1
 
 %build
 mkdir -p %{_target_platform}
@@ -179,9 +181,10 @@ tar -zxf %{S:11} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
 %defattr(-,root,root,-)
 %doc LICENSE ReleaseNotes
 %dir %{_datadir}/Geant4-%{libversion}
-%{_libdir}/libG*.so
+%{_libdir}/libG*.so.*
 
 %files devel
+%{_libdir}/libG*.so
 %{_bindir}/geant4-config
 %{_includedir}/Geant4
 %{_libdir}/Geant4-%{libversion}

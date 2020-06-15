@@ -1,0 +1,12 @@
+diff -upr geant4.10.06.p02/cmake/Modules/G4DeveloperAPI_OLD.cmake geant4.10.06.p02.fix/cmake/Modules/G4DeveloperAPI_OLD.cmake
+--- geant4.10.06.p02/cmake/Modules/G4DeveloperAPI_OLD.cmake	2020-05-29 19:42:50.000000000 +0800
++++ geant4.10.06.p02.fix/cmake/Modules/G4DeveloperAPI_OLD.cmake	2020-06-15 17:32:14.560000000 +0800
+@@ -261,6 +261,8 @@ macro(geant4_library_target)
+     set_target_properties(${G4LIBTARGET_NAME}
+       PROPERTIES MACOSX_RPATH 1
+       )
++    set_target_properties(${G4LIBTARGET_NAME}
++      PROPERTIES VERSION ${${PROJECT_NAME}_VERSION} SOVERSION ${${PROJECT_NAME}_VERSION_MAJOR})
+     # Add '@loader_path' to INSTALL_RPATH on macOS so that Geant4
+     # libraries self-locate each other whilst remaining relocatable
+     if(APPLE)
