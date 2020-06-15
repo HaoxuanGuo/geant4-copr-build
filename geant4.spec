@@ -160,7 +160,7 @@ setenv G4ABLADATA "%{_datadir}/Geant4-%{libversion}/data/G4ABLA%{G4ABLA_version}
 setenv G4INCLDATA "%{_datadir}/Geant4-%{libversion}/data/G4INCL%{G4INCL_version}"
 setenv G4ENSDFSTATEDATA "%{_datadir}/Geant4-%{libversion}/data/G4ENSDFSTATE%{G4ENSDFSTATE_version}"
 EOF
-
+mkdir -p %{buildroot}%{_datadir}/Geant4-%{libversion}/data
 tar -zxf %{S:1} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
 tar -zxf %{S:2} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
 tar -zxf %{S:3} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
