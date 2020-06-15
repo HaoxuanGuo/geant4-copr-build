@@ -12,6 +12,8 @@
 %define         G4INCL_version 1.0
 %define         G4ENSDFSTATE_version 2.2
 
+%global         optflags %(echo %{optflags} | sed 's/-O[0-3]/-O3 -flto -fno-fat-lto-objects -DNDEBUG -fno-trapping-math -ftree-vectorize -fno-math-errno/ ')
+
 Name:           geant4
 Version:        10.06.p01
 Release:        5%{?dist}
@@ -102,14 +104,6 @@ Geant4 datasets.
 %build
 mkdir -p %{_target_platform}
 pushd %{_target_platform}
-str='%optflags'
-str=${str/-O2/-O3}
-CXXFLAGS=${str}' -flto -ffat-lto-objects -DNDEBUG -fno-trapping-math -ftree-vectorize -fno-math-errno'
-export CXXFLAGS
-LDFLAGS='-Wl,-z,relro -Wl,--as-needed  -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld'
-export LDFLAGS
-LT_SYS_LIBRARY_PATH=/usr/lib64:
-export LT_SYS_LIBRARY_PATH
 %{cmake} -DGEANT4_BUILD_MULTITHREADED=ON \
          -DGEANT4_INSTALL_DATA=OFF \
          -DGEANT4_USE_GDML=ON \
