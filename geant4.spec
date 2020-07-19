@@ -16,7 +16,7 @@
 
 Name:           geant4
 Version:        10.06.p02
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Toolkit for the simulation of the passage of particles through matter
 
 License:        BSD
@@ -36,7 +36,7 @@ Source11:       https://cern.ch/geant4-data/datasets/G4ENSDFSTATE.%{G4ENSDFSTATE
 Patch0:         fix_soname.patch
 
 
-%if 0%{?fedora} > 23
+%if 0%{?fedora} > 23 || 0%{?rhel} >= 8
 BuildRequires:  motif-devel
 # Requires:       motif
 %else
@@ -74,7 +74,7 @@ Recommends:     zlib-devel
 Recommends:     qt5-devel
 Recommends:     cmake
 Recommends:     make
-%if 0%{?fedora} > 23
+%if 0%{?fedora} > 23 || 0%{?rhel} >= 8
 Recommends:     motif-devel
 %else
 Recommends:     lesstif-devel
@@ -201,31 +201,34 @@ tar -zxf %{S:11} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
 %{_sysconfdir}/profile.d/%{name}-data.sh
 
 %changelog
-* Mon Jun 15 2020 Qiyu Yan <yanqiyu01@gmail.com> - 10.06.p02-1
+* Sun Jul 19 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.06.p02-2
+- Use motif on RHEL > 8 release due to suggestion in issue #1
+
+* Mon Jun 15 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.06.p02-1
 - update to 10.06.p02 upstream
 
-* Thu Apr 23 2020 Qiyu Yan <3437889+karuboniru@users.noreply.github.com> - 10.06.p01-4
+* Thu Apr 23 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.06.p01-4
 - Use O3 build 
 
-* Fri Apr 10 2020 Qiyu Yan <3437889+karuboniru@users.noreply.github.com> - 10.06.p01-3
+* Fri Apr 10 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.06.p01-3
 - rebuilt
 
-* Sun Mar 29 2020 Qiyu Yan <3437889+karuboniru@users.noreply.github.com> - 10.06.p01-2
+* Sun Mar 29 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.06.p01-2
 - rebuilt
 
-* Sat Mar 14 2020 Qiyu Yan <3437889+karuboniru@users.noreply.github.com> - 10.06-4
+* Sat Mar 14 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.06-4
 - rebuilt
 
-* Wed Mar 04 2020 Qiyu Yan <3437889+karuboniru@users.noreply.github.com> - 10.06-3
+* Wed Mar 04 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.06-3
 - rebuilt
 
-* Mon Jan 27 2020 Qiyu Yan <3437889+karuboniru@users.noreply.github.com> - 10.06-2
+* Mon Jan 27 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.06-2
 - rebuilt
 
-* Thu Oct 17 2019 Qiyu Yan <yanqy@ihep.ac.cn> - 10.05.p01-3
+* Thu Oct 17 2019 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.05.p01-3
 - Fix Dep
 
-* Thu Oct 17 2019 Qiyu Yan <yanqy@ihep.ac.cn> - 10.05.p01
+* Thu Oct 17 2019 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.05.p01
 - geant4.10.05.p01
 
 * Wed Jan  6 2016 Alexey Kurov <nucleo@fedoraproject.org> - 10.01.p02-1
