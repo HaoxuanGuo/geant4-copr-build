@@ -16,7 +16,7 @@
 
 Name:           geant4
 Version:        10.06.p02
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Toolkit for the simulation of the passage of particles through matter
 
 License:        BSD
@@ -36,13 +36,7 @@ Source11:       https://cern.ch/geant4-data/datasets/G4ENSDFSTATE.%{G4ENSDFSTATE
 Patch0:         fix_soname.patch
 
 
-%if 0%{?fedora} > 23 || 0%{?rhel} >= 8
 BuildRequires:  motif-devel
-# Requires:       motif
-%else
-BuildRequires:  lesstif-devel
-# Requires:       lesstif
-%endif
 BuildRequires:  mesa-libGLU-devel
 BuildRequires:  libXmu-devel
 BuildRequires:  libXpm-devel
@@ -64,6 +58,7 @@ well as studies in medical and space science.
 %package devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
+
 Recommends:     mesa-libGLU-devel
 Recommends:     libXmu-devel
 Recommends:     libXpm-devel
@@ -74,11 +69,7 @@ Recommends:     zlib-devel
 Recommends:     qt5-devel
 Recommends:     cmake
 Recommends:     make
-%if 0%{?fedora} > 23 || 0%{?rhel} >= 8
 Recommends:     motif-devel
-%else
-Recommends:     lesstif-devel
-%endif
 
 %description    devel
 Development files for %{name}.
@@ -201,6 +192,9 @@ tar -zxf %{S:11} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
 %{_sysconfdir}/profile.d/%{name}-data.sh
 
 %changelog
+* Mon Jul 20 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.06.p02-3
+- Cleanup builds for old fedora/epel release (they no longer build)
+
 * Sun Jul 19 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.06.p02-2
 - Use motif on RHEL > 8 release due to suggestion in issue #1
 
