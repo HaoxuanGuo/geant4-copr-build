@@ -162,9 +162,7 @@ tar -zxf %{S:9} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
 tar -zxf %{S:10} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
 tar -zxf %{S:11} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
+%ldconfig_scriptlets
 
 %files
 %defattr(-,root,root,-)
