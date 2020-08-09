@@ -1,3 +1,7 @@
+%if 0%{?fedora}<33||0%{?rhel} >= 8
+%undefine __cmake_in_source_build
+%endif
+
 %define         libversion 10.6.2
 
 %define         G4NDL_version 4.6
@@ -16,7 +20,7 @@
 
 Name:           geant4
 Version:        10.06.p02
-Release:        3%{?dist}
+Release:        5%{?dist}
 Summary:        Toolkit for the simulation of the passage of particles through matter
 
 License:        BSD
@@ -95,9 +99,7 @@ Geant4 datasets.
 %patch0 -p1
 
 %build
-mkdir -p %{_target_platform}
-pushd %{_target_platform}
-%{cmake} -DGEANT4_BUILD_MULTITHREADED=ON \
+%cmake   -DGEANT4_BUILD_MULTITHREADED=ON \
          -DGEANT4_INSTALL_DATA=OFF \
          -DGEANT4_USE_GDML=ON \
          -DGEANT4_USE_G3TOG4=ON \
@@ -110,15 +112,11 @@ pushd %{_target_platform}
          -DGEANT4_USE_SYSTEM_CLHEP=OFF \
          -DGEANT4_USE_SYSTEM_EXPAT=ON \
          -DGEANT4_USE_SYSTEM_ZLIB=ON \
-         -DGEANT4_BUILD_CXXSTD=14 \
-         ..
-%make_build
-popd
+         -DGEANT4_BUILD_CXXSTD=14
+%cmake_build
 
 %install
-pushd %{_target_platform}
-%make_install
-popd
+%cmake_install
 
 rm -rf %{buildroot}%{_bindir}/geant4.sh %{buildroot}%{_bindir}/geant4.csh
 
@@ -192,6 +190,12 @@ tar -zxf %{S:11} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
 %{_sysconfdir}/profile.d/%{name}-data.sh
 
 %changelog
+* Sun Aug 09 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.06.p02-5
+- rebuilt
+
+* Mon Jul 20 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.06.p02-4
+- Out-of-Source Build
+
 * Mon Jul 20 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.06.p02-3
 - Cleanup builds for old fedora/epel release (they no longer build)
 
