@@ -20,7 +20,7 @@
 
 Name:           geant4
 Version:        10.06.p02
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Toolkit for the simulation of the passage of particles through matter
 
 License:        BSD
@@ -51,6 +51,7 @@ BuildRequires:  zlib-devel
 BuildRequires:  gcc-c++
 BuildRequires:  make
 BuildRequires:  cmake
+BuildRequires:  ninja-build
 BuildRequires:  qt5-qtbase-devel
 
 
@@ -99,7 +100,8 @@ Geant4 datasets.
 %patch0 -p1
 
 %build
-%cmake   -DGEANT4_BUILD_MULTITHREADED=ON \
+%cmake   -GNinja \
+         -DGEANT4_BUILD_MULTITHREADED=ON \
          -DGEANT4_INSTALL_DATA=OFF \
          -DGEANT4_USE_GDML=ON \
          -DGEANT4_USE_G3TOG4=ON \
@@ -188,6 +190,9 @@ tar -zxf %{S:11} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
 %{_sysconfdir}/profile.d/%{name}-data.sh
 
 %changelog
+* Wed Sep  2 10:43:42 CST 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.06.p02-6
+- rebuilt
+
 * Sun Aug 09 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.06.p02-5
 - rebuilt
 
