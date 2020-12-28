@@ -2,25 +2,25 @@
 %undefine __cmake_in_source_build
 %endif
 
-%define         libversion 10.6.2
+%define         libversion 10.7.0
 
 %define         G4NDL_version 4.6
-%define         G4EMLOW_version 7.9.1
-%define         G4PhotonEvaporation_version 5.5
-%define         G4RadioactiveDecay_version 5.4
-%define         G4PARTICLEXS_version 2.1
+%define         G4EMLOW_version 7.13
+%define         G4PhotonEvaporation_version 5.7
+%define         G4RadioactiveDecay_version 5.6
+%define         G4PARTICLEXS_version 3.1
 %define         G4PII_version 1.3
-%define         G4RealSurface_version 2.1.1
+%define         G4RealSurface_version 2.2
 %define         G4SAIDDATA_version 2.0
 %define         G4ABLA_version 3.1
 %define         G4INCL_version 1.0
-%define         G4ENSDFSTATE_version 2.2
+%define         G4ENSDFSTATE_version 2.3
 
-%global         optflags %(echo %{optflags} | sed 's/-O[0-3]/-O3 -flto -fno-fat-lto-objects -DNDEBUG -fno-trapping-math -ftree-vectorize -fno-math-errno/ ')
+%global         optflags %(echo %{optflags} | sed 's/-O[0-3]/-O3 -flto -fno-fat-lto-objects -DNDEBUG -fno-trapping-math -ftree-vectorize -fno-math-errno/')
 
 Name:           geant4
-Version:        10.06.p02
-Release:        6%{?dist}
+Version:        10.07
+Release:        1%{?dist}
 Summary:        Toolkit for the simulation of the passage of particles through matter
 
 License:        BSD
@@ -37,13 +37,10 @@ Source8:        https://cern.ch/geant4-data/datasets/G4SAIDDATA.%{G4SAIDDATA_ver
 Source9:        https://cern.ch/geant4-data/datasets/G4ABLA.%{G4ABLA_version}.tar.gz
 Source10:       https://cern.ch/geant4-data/datasets/G4INCL.%{G4INCL_version}.tar.gz
 Source11:       https://cern.ch/geant4-data/datasets/G4ENSDFSTATE.%{G4ENSDFSTATE_version}.tar.gz
-Patch0:         fix_soname.patch
+Patch0:         0001-fix-soversion.patch
 
 
 BuildRequires:  motif-devel
-BuildRequires:  mesa-libGLU-devel
-BuildRequires:  libXmu-devel
-BuildRequires:  libXpm-devel
 BuildRequires:  libXi-devel
 BuildRequires:  xerces-c-devel
 BuildRequires:  expat-devel
@@ -64,17 +61,12 @@ well as studies in medical and space science.
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
-Recommends:     mesa-libGLU-devel
-Recommends:     libXmu-devel
-Recommends:     libXpm-devel
-Recommends:     libXi-devel
 Recommends:     xerces-c-devel
 Recommends:     expat-devel
 Recommends:     zlib-devel
 Recommends:     qt5-devel
 Recommends:     cmake
 Recommends:     make
-Recommends:     motif-devel
 
 %description    devel
 Development files for %{name}.
@@ -104,13 +96,11 @@ Geant4 datasets.
          -DGEANT4_BUILD_MULTITHREADED=ON \
          -DGEANT4_INSTALL_DATA=OFF \
          -DGEANT4_USE_GDML=ON \
-         -DGEANT4_USE_G3TOG4=ON \
+         -DGEANT4_USE_G3TOG4=OFF \
          -DGEANT4_USE_QT=ON \
-         -DOpenGL_GL_PREFERENCE=GLVND \
-         -DGEANT4_USE_XM=ON \
-         -DGEANT4_USE_OPENGL_X11=ON \
+         -DGEANT4_USE_XM=OFF \
          -DGEANT4_USE_INVENTOR=OFF \
-         -DGEANT4_USE_RAYTRACER_X11=ON \
+         -DGEANT4_USE_RAYTRACER_X11=OFF \
          -DGEANT4_USE_SYSTEM_CLHEP=OFF \
          -DGEANT4_USE_SYSTEM_EXPAT=ON \
          -DGEANT4_USE_SYSTEM_ZLIB=ON \
@@ -176,7 +166,9 @@ tar -zxf %{S:11} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
 %{_libdir}/libG*.so
 %{_bindir}/geant4-config
 %{_includedir}/Geant4
+%{_includedir}/PTL
 %{_libdir}/Geant4-%{libversion}
+%{_libdir}/PTL
 %{_datadir}/Geant4-%{libversion}
 %exclude %{_datadir}/Geant4-%{libversion}/data
 %exclude %{_datadir}/Geant4-%{libversion}/examples
@@ -190,6 +182,9 @@ tar -zxf %{S:11} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
 %{_sysconfdir}/profile.d/%{name}-data.sh
 
 %changelog
+* Mon Dec 28 21:53:05 CST 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.07-1
+- Update to 10.7 upstream release
+
 * Wed Sep  2 10:43:42 CST 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.06.p02-6
 - rebuilt
 

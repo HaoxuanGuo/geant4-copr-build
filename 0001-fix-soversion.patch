@@ -1,0 +1,36 @@
+From 47feca286e4c0816a535019f96fef2f383f9886b Mon Sep 17 00:00:00 2001
+From: Qiyu Yan <yanqiyu@fedoraproject.org>
+Date: Mon, 28 Dec 2020 21:30:08 +0800
+Subject: [PATCH] fix soversion
+
+---
+ cmake/Modules/G4DeveloperAPI.cmake | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/cmake/Modules/G4DeveloperAPI.cmake b/cmake/Modules/G4DeveloperAPI.cmake
+index 03cf2ce8..71336b9a 100644
+--- a/cmake/Modules/G4DeveloperAPI.cmake
++++ b/cmake/Modules/G4DeveloperAPI.cmake
+@@ -686,7 +686,8 @@ function(geant4_library_target)
+     target_include_directories(${G4GLOBLIB_NAME}
+       PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+     )
+-    set_target_properties(${G4GLOBLIB_NAME} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
++    set_target_properties(${G4GLOBLIB_NAME} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON
++    VERSION ${${PROJECT_NAME}_VERSION} SOVERSION ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR})
+ 
+     install(TARGETS ${G4GLOBLIB_NAME}
+       EXPORT Geant4LibraryDepends
+@@ -875,7 +876,8 @@ function(__geant4_add_library _name _type)
+     # and clients must apply it when linking to the shared libs. The global
+     # category handles the exact import/export statements
+     target_compile_definitions(${_target_name} PUBLIC G4LIB_BUILD_DLL)
+-    set_target_properties(${_target_name} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
++    set_target_properties(${_target_name} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON
++    VERSION ${${PROJECT_NAME}_VERSION} SOVERSION ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR})
+ 
+     # MacOS
+     # Use '@rpath' in install names of libraries on macOS to provide relocatibility
+-- 
+2.29.2
+
