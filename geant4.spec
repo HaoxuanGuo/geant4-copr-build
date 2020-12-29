@@ -20,7 +20,7 @@
 
 Name:           geant4
 Version:        10.07
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Toolkit for the simulation of the passage of particles through matter
 
 License:        BSD
@@ -178,10 +178,13 @@ tar -zxf %{S:11} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
 
 %files data
 %{_datadir}/Geant4-%{libversion}/data
-%{_sysconfdir}/profile.d/%{name}-data.csh
-%{_sysconfdir}/profile.d/%{name}-data.sh
+%config %{_sysconfdir}/profile.d/%{name}-data.csh
+%config %{_sysconfdir}/profile.d/%{name}-data.sh
 
 %changelog
+* Wed Dec 30 00:28:23 CST 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.07-2
+- add missing config flag
+
 * Mon Dec 28 21:53:05 CST 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.07-1
 - Update to 10.7 upstream release
 
