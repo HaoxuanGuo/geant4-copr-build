@@ -2,13 +2,13 @@
 %undefine __cmake_in_source_build
 %endif
 
-%define         libversion 10.7.0
+%define         libversion 10.7.1
 
 %define         G4NDL_version 4.6
 %define         G4EMLOW_version 7.13
 %define         G4PhotonEvaporation_version 5.7
 %define         G4RadioactiveDecay_version 5.6
-%define         G4PARTICLEXS_version 3.1
+%define         G4PARTICLEXS_version 3.1.1
 %define         G4PII_version 1.3
 %define         G4RealSurface_version 2.2
 %define         G4SAIDDATA_version 2.0
@@ -16,11 +16,11 @@
 %define         G4INCL_version 1.0
 %define         G4ENSDFSTATE_version 2.3
 
-%global         optflags %(echo %{optflags} | sed 's/-O[0-3]/-O3 -flto -fno-fat-lto-objects -DNDEBUG -fno-trapping-math -ftree-vectorize -fno-math-errno/')
+%global         optflags %(echo %{optflags} | sed 's/-O[0-3]/-O3 -DNDEBUG -fno-trapping-math -ftree-vectorize -fno-math-errno/')
 
 Name:           geant4
-Version:        10.07
-Release:        2%{?dist}
+Version:        10.07.p01
+Release:        1%{?dist}
 Summary:        Toolkit for the simulation of the passage of particles through matter
 
 License:        BSD
@@ -104,7 +104,8 @@ Geant4 datasets.
          -DGEANT4_USE_SYSTEM_CLHEP=OFF \
          -DGEANT4_USE_SYSTEM_EXPAT=ON \
          -DGEANT4_USE_SYSTEM_ZLIB=ON \
-         -DGEANT4_BUILD_CXXSTD=14
+         -DGEANT4_BUILD_CXXSTD=14 \
+         -DGEANT4_BUILD_TLS_MODEL=auto
 %cmake_build
 
 %install
@@ -154,6 +155,8 @@ tar -zxf %{S:9} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
 tar -zxf %{S:10} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
 tar -zxf %{S:11} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
 
+chmod -x %{buildroot}%{_datadir}/Geant4-%{libversion}/geant4make/geant4make.csh
+
 %ldconfig_scriptlets
 
 %files
@@ -166,9 +169,7 @@ tar -zxf %{S:11} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
 %{_libdir}/libG*.so
 %{_bindir}/geant4-config
 %{_includedir}/Geant4
-%{_includedir}/PTL
 %{_libdir}/Geant4-%{libversion}
-%{_libdir}/PTL
 %{_datadir}/Geant4-%{libversion}
 %exclude %{_datadir}/Geant4-%{libversion}/data
 %exclude %{_datadir}/Geant4-%{libversion}/examples
