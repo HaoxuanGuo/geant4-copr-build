@@ -2,13 +2,13 @@
 %undefine __cmake_in_source_build
 %endif
 
-%define         libversion 10.7.1
+%define         libversion 11.0.0
 
 %define         G4NDL_version 4.6
-%define         G4EMLOW_version 7.13
+%define         G4EMLOW_version 8.0
 %define         G4PhotonEvaporation_version 5.7
 %define         G4RadioactiveDecay_version 5.6
-%define         G4PARTICLEXS_version 3.1.1
+%define         G4PARTICLEXS_version 4.0
 %define         G4PII_version 1.3
 %define         G4RealSurface_version 2.2
 %define         G4SAIDDATA_version 2.0
@@ -19,13 +19,13 @@
 %global         optflags %(echo %{optflags} | sed 's/-O[0-3]/-O3 -DNDEBUG -fno-trapping-math -ftree-vectorize -fno-math-errno/')
 
 Name:           geant4
-Version:        10.07.p01
+Version:        11.0.0
 Release:        1%{?dist}
 Summary:        Toolkit for the simulation of the passage of particles through matter
 
 License:        BSD
 URL:            http://geant4.cern.ch/
-Source0:        https://geant4-data.web.cern.ch/geant4-data/releases/%{name}.%{version}.tar.gz
+Source0:        https://geant4-data.web.cern.ch/releases/%{name}-v%{version}.tar.gz
 Source1:        https://cern.ch/geant4-data/datasets/G4NDL.%{G4NDL_version}.tar.gz
 Source2:        https://cern.ch/geant4-data/datasets/G4EMLOW.%{G4EMLOW_version}.tar.gz
 Source3:        https://cern.ch/geant4-data/datasets/G4PhotonEvaporation.%{G4PhotonEvaporation_version}.tar.gz
@@ -88,8 +88,7 @@ BuildArch:      noarch
 Geant4 datasets.
 
 %prep
-%setup -q -n %{name}.%{version}
-%patch0 -p1
+%autosetup -p1 -n %{name}-v%{version}
 
 %build
 %cmake   -GNinja \
@@ -104,7 +103,6 @@ Geant4 datasets.
          -DGEANT4_USE_SYSTEM_CLHEP=OFF \
          -DGEANT4_USE_SYSTEM_EXPAT=ON \
          -DGEANT4_USE_SYSTEM_ZLIB=ON \
-         -DGEANT4_BUILD_CXXSTD=14 \
          -DGEANT4_BUILD_TLS_MODEL=auto
 %cmake_build
 
