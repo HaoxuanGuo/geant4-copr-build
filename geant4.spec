@@ -2,43 +2,16 @@
 %undefine __cmake_in_source_build
 %endif
 
-%define         libversion 11.0.0
-
-%define         G4NDL_version 4.6
-%define         G4EMLOW_version 8.0
-%define         G4PhotonEvaporation_version 5.7
-%define         G4RadioactiveDecay_version 5.6
-%define         G4PARTICLEXS_version 4.0
-%define         G4PII_version 1.3
-%define         G4RealSurface_version 2.2
-%define         G4SAIDDATA_version 2.0
-%define         G4ABLA_version 3.1
-%define         G4INCL_version 1.0
-%define         G4ENSDFSTATE_version 2.3
-
 %global         optflags %(echo %{optflags} | sed 's/-O[0-3]/-O3 -DNDEBUG -fno-trapping-math -ftree-vectorize -fno-math-errno/')
 
 Name:           geant4
-Version:        11.0.0
+Version:        11.1.0
 Release:        1%{?dist}
 Summary:        Toolkit for the simulation of the passage of particles through matter
 
 License:        BSD
 URL:            http://geant4.cern.ch/
-Source0:        https://geant4-data.web.cern.ch/releases/%{name}-v%{version}.tar.gz
-Source1:        https://cern.ch/geant4-data/datasets/G4NDL.%{G4NDL_version}.tar.gz
-Source2:        https://cern.ch/geant4-data/datasets/G4EMLOW.%{G4EMLOW_version}.tar.gz
-Source3:        https://cern.ch/geant4-data/datasets/G4PhotonEvaporation.%{G4PhotonEvaporation_version}.tar.gz
-Source4:        https://cern.ch/geant4-data/datasets/G4RadioactiveDecay.%{G4RadioactiveDecay_version}.tar.gz
-Source5:        https://cern.ch/geant4-data/datasets/G4PARTICLEXS.%{G4PARTICLEXS_version}.tar.gz
-Source6:        https://cern.ch/geant4-data/datasets/G4PII.%{G4PII_version}.tar.gz
-Source7:        https://cern.ch/geant4-data/datasets/G4RealSurface.%{G4RealSurface_version}.tar.gz
-Source8:        https://cern.ch/geant4-data/datasets/G4SAIDDATA.%{G4SAIDDATA_version}.tar.gz
-Source9:        https://cern.ch/geant4-data/datasets/G4ABLA.%{G4ABLA_version}.tar.gz
-Source10:       https://cern.ch/geant4-data/datasets/G4INCL.%{G4INCL_version}.tar.gz
-Source11:       https://cern.ch/geant4-data/datasets/G4ENSDFSTATE.%{G4ENSDFSTATE_version}.tar.gz
-Patch0:         0001-fix-soversion.patch
-
+Source:         https://geant4-data.web.cern.ch/releases/%{name}-v%{version}.tar.gz
 
 BuildRequires:  motif-devel
 BuildRequires:  libXi-devel
@@ -51,6 +24,8 @@ BuildRequires:  cmake
 BuildRequires:  ninja-build
 BuildRequires:  qt5-qtbase-devel
 
+Recommends:     %{name}-data = %{version}-%{release}
+Recommends:     %{name}-examples = %{version}-%{release}
 
 %description
 Geant4 is a toolkit for the simulation of the passage of particles through matter.
@@ -93,7 +68,7 @@ Geant4 datasets.
 %build
 %cmake   -GNinja \
          -DGEANT4_BUILD_MULTITHREADED=ON \
-         -DGEANT4_INSTALL_DATA=OFF \
+         -DGEANT4_INSTALL_DATA=ON \
          -DGEANT4_USE_GDML=ON \
          -DGEANT4_USE_G3TOG4=OFF \
          -DGEANT4_USE_QT=ON \
@@ -109,78 +84,51 @@ Geant4 datasets.
 %install
 %cmake_install
 
-rm -rf %{buildroot}%{_bindir}/geant4.sh %{buildroot}%{_bindir}/geant4.csh
-
 mkdir -p %{buildroot}%{_sysconfdir}/profile.d
 
 cat > %{buildroot}%{_sysconfdir}/profile.d/%{name}-data.sh <<EOF
-export G4NEUTRONHPDATA="%{_datadir}/Geant4-%{libversion}/data/G4NDL%{G4NDL_version}"
-export G4LEDATA="%{_datadir}/Geant4-%{libversion}/data/G4EMLOW%{G4EMLOW_version}"
-export G4LEVELGAMMADATA="%{_datadir}/Geant4-%{libversion}/data/PhotonEvaporation%{G4PhotonEvaporation_version}"
-export G4RADIOACTIVEDATA="%{_datadir}/Geant4-%{libversion}/data/RadioactiveDecay%{G4RadioactiveDecay_version}"
-export G4PARTICLEXSDATA="%{_datadir}/Geant4-%{libversion}/data/G4PARTICLEXS%{G4PARTICLEXS_version}"
-export G4PIIDATA="%{_datadir}/Geant4-%{libversion}/data/G4PII%{G4PII_version}"
-export G4REALSURFACEDATA="%{_datadir}/Geant4-%{libversion}/data/RealSurface%{G4RealSurface_version}"
-export G4SAIDXSDATA="%{_datadir}/Geant4-%{libversion}/data/G4SAIDDATA%{G4SAIDDATA_version}"
-export G4ABLADATA="%{_datadir}/Geant4-%{libversion}/data/G4ABLA%{G4ABLA_version}"
-export G4INCLDATA="%{_datadir}/Geant4-%{libversion}/data/G4INCL%{G4INCL_version}"
-export G4ENSDFSTATEDATA="%{_datadir}/Geant4-%{libversion}/data/G4ENSDFSTATE%{G4ENSDFSTATE_version}"
+pushd %{_bindir}/ >/dev/null; . ./geant4.sh; popd >/dev/null
 EOF
 
 cat > %{buildroot}%{_sysconfdir}/profile.d/%{name}-data.csh <<EOF
-setenv G4NEUTRONHPDATA "%{_datadir}/Geant4-%{libversion}/data/G4NDL%{G4NDL_version}"
-setenv G4LEDATA "%{_datadir}/Geant4-%{libversion}/data/G4EMLOW%{G4EMLOW_version}"
-setenv G4LEVELGAMMADATA "%{_datadir}/Geant4-%{libversion}/data/PhotonEvaporation%{G4PhotonEvaporation_version}"
-setenv G4RADIOACTIVEDATA "%{_datadir}/Geant4-%{libversion}/data/RadioactiveDecay%{G4RadioactiveDecay_version}"
-setenv G4PARTICLEXSDATA "%{_datadir}/Geant4-%{libversion}/data/G4PARTICLEXS%{G4PARTICLEXS_version}"
-setenv G4PIIDATA "%{_datadir}/Geant4-%{libversion}/data/G4PII%{G4PII_version}"
-setenv G4REALSURFACEDATA "%{_datadir}/Geant4-%{libversion}/data/RealSurface%{G4RealSurface_version}"
-setenv G4SAIDXSDATA "%{_datadir}/Geant4-%{libversion}/data/G4SAIDDATA%{G4SAIDDATA_version}"
-setenv G4ABLADATA "%{_datadir}/Geant4-%{libversion}/data/G4ABLA%{G4ABLA_version}"
-setenv G4INCLDATA "%{_datadir}/Geant4-%{libversion}/data/G4INCL%{G4INCL_version}"
-setenv G4ENSDFSTATEDATA "%{_datadir}/Geant4-%{libversion}/data/G4ENSDFSTATE%{G4ENSDFSTATE_version}"
+pushd %{_bindir}/ >/dev/null; . ./geant4.csh; popd >/dev/null
 EOF
-mkdir -p %{buildroot}%{_datadir}/Geant4-%{libversion}/data
-tar -zxf %{S:1} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
-tar -zxf %{S:2} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
-tar -zxf %{S:3} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
-tar -zxf %{S:4} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
-tar -zxf %{S:5} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
-tar -zxf %{S:6} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
-tar -zxf %{S:7} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
-tar -zxf %{S:8} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
-tar -zxf %{S:9} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
-tar -zxf %{S:10} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
-tar -zxf %{S:11} --directory %{buildroot}%{_datadir}/Geant4-%{libversion}/data
 
-chmod -x %{buildroot}%{_datadir}/Geant4-%{libversion}/geant4make/geant4make.csh
+chmod -x %{buildroot}%{_datadir}/Geant4/geant4make/geant4make.csh
 
 %ldconfig_scriptlets
 
 %files
 %defattr(-,root,root,-)
 %doc LICENSE ReleaseNotes
-%dir %{_datadir}/Geant4-%{libversion}
+%dir %{_datadir}/Geant4
 %{_libdir}/libG*.so.*
 
 %files devel
 %{_libdir}/libG*.so
 %{_bindir}/geant4-config
 %{_includedir}/Geant4
-%{_libdir}/Geant4-%{libversion}
-%{_datadir}/Geant4-%{libversion}
-%exclude %{_datadir}/Geant4-%{libversion}/data
-%exclude %{_datadir}/Geant4-%{libversion}/examples
+%{_libdir}/Geant4-%{version}
+%{_datadir}/Geant4
+%{_libdir}/cmake/Geant4/*
+%{_libdir}/pkgconfig/G4ptl.pc
+%exclude %{_datadir}/Geant4/data
+%exclude %{_datadir}/Geant4/examples
 
 %files examples
-%{_datadir}/Geant4-%{libversion}/examples
+%{_datadir}/Geant4/examples
 
 %files data
-%{_datadir}/Geant4-%{libversion}/data
-%config %{_sysconfdir}/profile.d/%{name}-data.csh
-%config %{_sysconfdir}/profile.d/%{name}-data.sh
+%{_datadir}/Geant4/data
+%{_bindir}/geant4.sh
+%{_bindir}/geant4.csh
+%{_sysconfdir}/profile.d/%{name}-data.sh
+%{_sysconfdir}/profile.d/%{name}-data.csh
 
 %changelog
+* Sun Jan 29 23:12:00 CST 2023 Haoxuan Guo <kuohaoxuan@outlook.com> - 11.1.0-1
+- update to 11.1 release and download data on compile time
+
 * Wed Dec 30 00:28:23 CST 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.07-2
 - add missing config flag
 
@@ -206,7 +154,7 @@ chmod -x %{buildroot}%{_datadir}/Geant4-%{libversion}/geant4make/geant4make.csh
 - update to 10.06.p02 upstream
 
 * Thu Apr 23 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.06.p01-4
-- Use O3 build 
+- Use O3 build
 
 * Fri Apr 10 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 10.06.p01-3
 - rebuilt
