@@ -5,7 +5,7 @@
 %global         optflags %(echo %{optflags} | sed 's/-O[0-3]/-O3 -DNDEBUG -fno-trapping-math -ftree-vectorize -fno-math-errno/')
 
 Name:           geant4
-Version:        11.1.0
+Version:        11.1.2
 Release:        1%{?dist}
 Summary:        Toolkit for the simulation of the passage of particles through matter
 
